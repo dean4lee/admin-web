@@ -20,6 +20,7 @@
     </el-aside>
     <el-container>
       <el-header class="topNavigation">
+        <span class="topNavigationSpan"></span>
         <el-dropdown trigger="click">
           <span class="el-dropdown-link">
             {{username}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -129,12 +130,18 @@
 
   .topNavigation {
     text-align: right;
-    padding-top: 20px;
+    vertical-align: middle;
     background-color: #545c64;
   }
+
 
   .el-dropdown-link {
     cursor: pointer;
     color: #fff;
+  }
+  .topNavigationSpan{
+    display: inline-block;
+    height:100%;
+    vertical-align: middle;
   }
 </style>
