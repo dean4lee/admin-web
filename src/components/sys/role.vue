@@ -236,8 +236,16 @@
         this.$axios.get(this.GLOBAL.baseurl + '/sys/res/list', {
           withCredentials: true
         }).then(res => {
-          let data = res.data;
-          this.resData = data.data;
+          let data = res.data.data;
+          //递归加载目录树
+          let parentRes = [];
+          data.forEach(res => {
+            if(res.parentId == 0){
+              parentRes.push(res);
+            }
+          });
+          parentRes.sort((a, b) => a.seq - b.seq);
+          this.resData = this.tree(parentRes, data);
         }).catch(err => {
           this.$message.error(err.response.data.msg)
         })
@@ -274,6 +282,7 @@
           this.updateParam.roleChar = row.roleChar;
           this.updateParam.remark = row.remark;
           this.checkedResIds = this.recursionChildrenNode(this.resData, row.resIds);
+          console.log(this.checkedResIds)
         } else {
           //显示添加页面
           this.dialogForm.add = true;
@@ -389,7 +398,7 @@
       recursionChildrenNode(resData, resIds) {
         let arr = [];
         for (let i of resData) {
-          if (i.children) {
+          if (i.children.length != 0) {
             let childArr = this.recursionChildrenNode(i.children, resIds);
             arr = arr.concat(childArr);
           } else {
@@ -400,6 +409,24 @@
           }
         }
         return arr;
+      },
+      /**
+       * 递归加载资源树
+       */
+      tree(parentRes, data){
+        parentRes.forEach(parent => {
+          parent.children = [];
+          data.forEach(res => {
+            if(parent.id == res.parentId){
+              parent.children.push(res);
+            }
+          });
+          if(parent.children) {
+            parent.children.sort((a, b) => a.seq - b.seq);
+            this.tree(parent.children, data);
+          }
+        });
+        return parentRes;
       }
     }
   }
