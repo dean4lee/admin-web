@@ -7,7 +7,7 @@
     name: "sqlLog",
     data() {
       return {
-        druidPath: this.GLOBAL.baseurl + '/druid'
+        druidPath: this.GLOBAL.baseurl + '/druid/index.html'
       }
     }
   }
