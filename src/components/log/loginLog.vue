@@ -33,7 +33,7 @@
       <el-table-column prop="ip" label="ip" min-width="100" align="center"/>
       <el-table-column prop="loginTime" label="登陆时间" min-width="100" align="center"/>
       <el-table-column prop="status" label="登陆状态" min-width="100" align="center" :formatter="statusFormatter"/>
-      <el-table-column prop="failInfo" label="登陆失败信息" min-width="100" align="center" :show-overflow-tooltip="true"/>
+      <el-table-column prop="msg" label="登陆失败信息" min-width="100" align="center" :show-overflow-tooltip="true"/>
     </el-table>
     <!-- 分页 -->
     <div class="block">
