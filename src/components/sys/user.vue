@@ -507,17 +507,26 @@
        * @param row
        */
       changeStatus(row) {
-        let data = new Object();
-        data.id = row.id;
-        data.status = row.status;
-        this.$axios.put(this.GLOBAL.baseurl + '/sys/user/status', data, {
-          withCredentials: true
-        }).then(res => {
-          this.$message.success(res.data.msg);
-          this.loadData();
-        }).catch(e => {
+        this.$confirm('确定要修改用户状态吗?', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let data = new Object();
+          data.id = row.id;
+          data.status = row.status;
+          this.$axios.put(this.GLOBAL.baseurl + '/sys/user/status', data, {
+            withCredentials: true
+          }).then(res => {
+            this.$message.success(res.data.msg);
+            this.loadData();
+          }).catch(e => {
+            row.status = !row.status;
+            this.$message.error(e.response.data.msg);
+          })
+        }).catch(() => {
           row.status = !row.status;
-          this.$message.error(e.response.data.msg);
+          this.$message.info("取消修改");
         })
       },
       /**
@@ -525,15 +534,23 @@
        * @param id
        */
       resetpwd(id) {
-        this.$axios.put(this.GLOBAL.baseurl + '/sys/user/resetPwd', null, {
-          params: {id: id},
-          withCredentials: true
-        }).then(res => {
-          this.dialogForm.update = false;
-          this.$message.success(res.data.msg);
-          this.loadData();
-        }).catch(e => {
-          this.$message.error(e.response.data.msg);
+        this.$confirm('确定要重置用户密码吗?', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios.put(this.GLOBAL.baseurl + '/sys/user/resetPwd', null, {
+            params: {id: id},
+            withCredentials: true
+          }).then(res => {
+            this.dialogForm.update = false;
+            this.$message.success(res.data.msg);
+            this.loadData();
+          }).catch(e => {
+            this.$message.error(e.response.data.msg);
+          })
+        }).catch(() => {
+          this.$message.info("取消修改");
         })
       },
       /**
