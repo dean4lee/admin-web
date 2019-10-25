@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import login from '@/components/login'
 import navigation from '@/components/navigation'
 import index from '@/components/index'
-import userinfo from '@/components/userinfo'
+import userinfo from '@/components/user/info'
+import resetPwd from '@/components/user/reset'
 import user from '@/components/sys/user'
 import role from '@/components/sys/role'
 import group from '@/components/sys/group'
@@ -41,6 +42,11 @@ export default new Router({
           path: '/info',
           name: '个人信息',
           component: userinfo,
+        },
+        {
+          path: '/reset',
+          name: '修改密码',
+          component: resetPwd,
         },
         {
           path: '/sys/user',

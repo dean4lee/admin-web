@@ -539,7 +539,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$axios.put(this.GLOBAL.baseurl + '/sys/user/resetPwd', null, {
+          this.$axios.put(this.GLOBAL.baseurl + '/sys/user/randomPwd', null, {
             params: {id: id},
             withCredentials: true
           }).then(res => {

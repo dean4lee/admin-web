@@ -27,6 +27,7 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="userinfo">个人信息</el-dropdown-item>
+            <el-dropdown-item @click.native="updatePwd">修改密码</el-dropdown-item>
             <el-dropdown-item @click.native="logout">退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -90,6 +91,10 @@
       //跳转到个人信息
       userinfo() {
         this.$router.push('/info');
+      },
+      //跳转到修改密码
+      updatePwd(){
+        this.$router.push('/reset');
       },
       /**
        * 递归加载目录树
