@@ -217,7 +217,7 @@
           //递归加载目录树
           let parentRes = [];
           data.forEach(res => {
-            if(res.parentId == 0){
+            if(res.pid == 0){
               parentRes.push(res);
             }
           });
@@ -386,7 +386,7 @@
         parentRes.forEach(parent => {
           parent.children = [];
           data.forEach(res => {
-            if(parent.id == res.parentId){
+            if(parent.id == res.pid){
               parent.children.push(res);
             }
           });

@@ -179,7 +179,7 @@
           let data = res.data.data;
           let parentData = [];
           data.forEach(dept => {
-            if (dept.parentId == 0) {
+            if (dept.pid == 0) {
               parentData.push(dept);
             }
           });
@@ -204,7 +204,7 @@
       tree(parentDept, data){
         parentDept.children = [];
         data.forEach(dept => {
-          if(dept.parentId == parentDept.id){
+          if(dept.pid == parentDept.id){
             parentDept.children.push(dept);
             this.tree(dept, data);
           }

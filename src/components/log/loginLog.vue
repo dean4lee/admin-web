@@ -31,7 +31,7 @@
       <el-table-column prop="osName" label="设备型号" min-width="100" align="center"/>
       <el-table-column prop="deviceType" label="设备类型" min-width="100" align="center"/>
       <el-table-column prop="ip" label="ip" min-width="100" align="center"/>
-      <el-table-column prop="loginTime" label="登陆时间" min-width="100" align="center"/>
+      <el-table-column prop="loginTime" label="登陆时间" min-width="100" align="center" :formatter="dateFormatter"/>
       <el-table-column prop="status" label="登陆状态" min-width="100" align="center" :formatter="statusFormatter"/>
       <el-table-column prop="msg" label="登陆失败信息" min-width="100" align="center" :show-overflow-tooltip="true"/>
     </el-table>
@@ -112,6 +112,16 @@
           return '失败'
         }
       },
+      /**
+       * 日期格式化
+       * @param row
+       * @param column
+       * @param cellValue
+       * @param index
+       */
+      dateFormatter(row, column, cellValue, index){
+        return this.$moment(cellValue).format('YYYY-MM-DD HH:mm:ss')
+      }
     }
   }
 </script>

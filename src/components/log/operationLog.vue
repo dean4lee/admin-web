@@ -40,7 +40,7 @@
       <el-table-column prop="result" label="返回信息" min-width="100" align="center" :show-overflow-tooltip="true"/>
       <el-table-column prop="exception" label="异常信息" min-width="100" align="center" :show-overflow-tooltip="true"/>
       <el-table-column prop="value" label="描述" min-width="100" align="center"/>
-      <el-table-column prop="createTime" label="创建时间" min-width="100" align="center"/>
+      <el-table-column prop="creationTime" label="创建时间" min-width="100" align="center" :formatter="dateFormatter"/>
     </el-table>
     <!-- 分页 -->
     <div class="block">
@@ -120,6 +120,16 @@
           return '失败'
         }
       },
+      /**
+       * 日期格式化
+       * @param row
+       * @param column
+       * @param cellValue
+       * @param index
+       */
+      dateFormatter(row, column, cellValue, index){
+        return this.$moment(cellValue).format('YYYY-MM-DD HH:mm:ss')
+      }
     }
   }
 </script>
