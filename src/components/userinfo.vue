@@ -15,9 +15,6 @@
         <el-form-item label="手机号" prop="phone">
           <el-input size="small" v-model="user.phone"/>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input show-password size="small" v-model="user.password"/>
-        </el-form-item>
         <el-form-item label="性别">
           <el-radio v-model="user.sex" label="1">男</el-radio>
           <el-radio v-model="user.sex" label="0">女</el-radio>
@@ -57,9 +54,6 @@
           phone: [
             // {required: true, message: '手机号不能为空', trigger: 'blur'},
             {pattern: '^[1][3-9][0-9]{9}$', message: '手机号格式不正确', trigger: 'blur'}
-          ],
-          password: [
-            {min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur'}
           ]
         }
       }
@@ -90,7 +84,6 @@
           }).then(res => {
             this.user.password = '';
             localStorage.setItem('user', JSON.stringify(this.user));
-            location.reload();
             this.$message.success(res.data.msg)
           }).catch(e => {
             this.$message.error(e.response.data.msg)
