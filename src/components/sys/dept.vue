@@ -255,6 +255,11 @@
           }
           if (this.addParam.pid) {
             this.addParam.pid = this.addParam.pid[this.addParam.pid.length - 1];
+          } else {
+            this.addParam.pid = 0;
+          }
+          if (!this.addParam.seq) {
+            this.addParam.seq = 0
           }
           this.GLOBAL.formatObj(this.addParam);
           this.$axios.post(this.GLOBAL.baseurl + '/sys/dept/add', this.addParam, {

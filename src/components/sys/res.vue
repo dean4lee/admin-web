@@ -232,7 +232,7 @@
           //递归加载目录树
           let parentRes = [];
           data.forEach(res => {
-            if(res.pid == 0){
+            if (res.pid == 0) {
               parentRes.push(res);
             }
           });
@@ -272,7 +272,7 @@
           let data = res.data.data;
           let parentRes = [];
           data.forEach(menu => {
-            if(menu.pid == 0){
+            if (menu.pid == 0) {
               parentRes.push(menu);
             }
           })
@@ -335,8 +335,13 @@
           if (!valid) {
             return;
           }
-          if(this.addParam.pid) {
+          if (this.addParam.pid) {
             this.addParam.pid = this.addParam.pid[this.addParam.pid.length - 1];
+          } else {
+            this.addParam.pid = 0;
+          }
+          if (!this.addParam.seq) {
+            this.addParam.seq = 0
           }
           this.GLOBAL.formatObj(this.addParam);
           this.$axios.post(this.GLOBAL.baseurl + '/sys/res/add', this.addParam, {
@@ -355,7 +360,7 @@
        */
       updateRes() {
         if (this.updateParam.pid) {
-          this.updateParam.pid = this.updateParam.pid[this.updateParam.pid.length-1];
+          this.updateParam.pid = this.updateParam.pid[this.updateParam.pid.length - 1];
         } else {
           this.updateParam.pid = 0;
         }
