@@ -245,7 +245,7 @@
             }
           });
           parentRes.sort((a, b) => a.seq - b.seq);
-          this.resData = this.tree(parentRes, data);
+          this.resData = this.GLOBAL.tree(parentRes, data);
         }).catch(err => {
           this.$message.error(err.response.data.msg)
         })
@@ -410,24 +410,6 @@
         }
         return arr;
       },
-      /**
-       * 递归加载资源树
-       */
-      tree(parentRes, data){
-        parentRes.forEach(parent => {
-          parent.children = [];
-          data.forEach(res => {
-            if(parent.id == res.pid){
-              parent.children.push(res);
-            }
-          });
-          if(parent.children) {
-            parent.children.sort((a, b) => a.seq - b.seq);
-            this.tree(parent.children, data);
-          }
-        });
-        return parentRes;
-      }
     }
   }
 </script>

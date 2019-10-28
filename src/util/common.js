@@ -1,4 +1,4 @@
-let baseurl = 'http://localhost:8080';
+let baseurl = 'http://localhost:8081';
 
 /**
  * 将对象中字段为""的值设置为null
@@ -15,6 +15,27 @@ function formatObj(obj) {
   })
 }
 
+/**
+ * 递归加载树结构
+ * @param parentData
+ * @param data
+ */
+function tree(parentData, data) {
+  parentData.sort((a, b) => a.seq - b.seq);
+  parentData.forEach(parentDept => {
+    parentDept.children = [];
+    data.forEach(dept => {
+      if (dept.pid == parentDept.id) {
+        parentDept.children.push(dept);
+      }
+    });
+    if(parentDept.children){
+      this.tree(parentDept.children, data);
+    }
+  })
+  return parentData;
+}
+
 export default {
-  baseurl, formatObj
+  baseurl, formatObj, tree
 }

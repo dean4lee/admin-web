@@ -57,10 +57,14 @@
     <!-- 资源添加 -->
     <el-dialog title="添加" :visible.sync="dialogForm.add" width="30%" @close="closeEditFrom(true)" class="dialogStyle">
       <el-form label-width="80px" ref="addParam" :model="addParam" :rules="rules.add">
-        <el-form-item label="父级菜单" prop="parentId">
-          <el-select size="small" v-model="addParam.parentId" placeholder="不选择默认是顶级菜单" clearable>
-            <el-option v-for="menu in menuList" :key="menu.id" :label="menu.name" :value="menu.id"></el-option>
-          </el-select>
+        <el-form-item label="父级部门">
+          <el-cascader
+            v-model="addParam.pid"
+            :options="menuList"
+            :props="cascaderProps"
+            :show-all-levels="false"
+            clearable
+            placeholder="不选择默认是顶级菜单"></el-cascader>
         </el-form-item>
         <el-form-item label="名称" prop="name">
           <el-input size="small" v-model="addParam.name"/>
@@ -91,10 +95,14 @@
     <el-dialog title="修改" :visible.sync="dialogForm.update" width="30%" @close="closeEditFrom(false)"
                class="dialogStyle">
       <el-form label-width="80px" ref="updateParam" :model="updateParam" :rules="rules.update">
-        <el-form-item label="父级菜单" prop="parentId">
-          <el-select size="small" v-cloak v-model="updateParam.parentId" placeholder="不选择默认是顶级菜单" clearable>
-            <el-option v-for="menu in menuList" :key="menu.id" :label="menu.name" :value="menu.id"></el-option>
-          </el-select>
+        <el-form-item label="父级部门">
+          <el-cascader
+            v-model="updateParam.pid"
+            :options="menuList"
+            :props="cascaderProps"
+            :show-all-levels="false"
+            clearable
+            placeholder="不选择默认是顶级菜单"></el-cascader>
         </el-form-item>
         <el-form-item label="名称" prop="name">
           <el-input size="small" v-model="updateParam.name"/>
@@ -138,6 +146,13 @@
         defaultProps: {
           children: 'children',
           label: 'name'
+        },
+        //多级联动配置
+        cascaderProps: {
+          checkStrictly: true,
+          children: 'children',
+          label: 'name',
+          value: 'id',
         },
         //按钮权限
         perm: {
@@ -221,8 +236,7 @@
               parentRes.push(res);
             }
           });
-          parentRes.sort((a, b) => a.seq - b.seq);
-          this.resData = this.tree(parentRes, data);
+          this.resData = this.GLOBAL.tree(parentRes, data);
           this.loading = false;
         }).catch(err => {
           this.loading = false
@@ -255,7 +269,14 @@
         this.$axios.get(this.GLOBAL.baseurl + "/sys/res/menuList", {
           withCredentials: true
         }).then(res => {
-          this.menuList = res.data.data;
+          let data = res.data.data;
+          let parentRes = [];
+          data.forEach(menu => {
+            if(menu.pid == 0){
+              parentRes.push(menu);
+            }
+          })
+          this.menuList = this.GLOBAL.tree(parentRes, data);
         }).catch(err => {
           this.$message.error(err.response.data.msg)
         })
@@ -278,23 +299,17 @@
       visibleEditForm(data) {
         this.loadMenuList();
         if (data.id) {
-          if (data.type == '1') {
-            data.type = '1';
-          } else if (data.type == '2') {
-            data.type = '2'
-          }
           if (data.parentId == 0) {
             data.parentId = null;
           }
           this.updateParam.id = data.id;
           this.updateParam.name = data.name;
-          this.updateParam.type = data.type;
+          this.updateParam.type = data.type + '';
           this.updateParam.url = data.url;
           this.updateParam.parentId = data.parentId;
           this.updateParam.permChar = data.permChar;
           this.updateParam.icon = data.icon;
           this.updateParam.seq = data.seq;
-
           this.dialogForm.update = true;
         } else {
           this.dialogForm.add = true;
@@ -320,6 +335,9 @@
           if (!valid) {
             return;
           }
+          if(this.addParam.pid) {
+            this.addParam.pid = this.addParam.pid[this.addParam.pid.length - 1];
+          }
           this.GLOBAL.formatObj(this.addParam);
           this.$axios.post(this.GLOBAL.baseurl + '/sys/res/add', this.addParam, {
             withCredentials: true
@@ -336,8 +354,10 @@
        * 修改资源
        */
       updateRes() {
-        if (!this.updateParam.parentId) {
-          this.updateParam.parentId = 0;
+        if (this.updateParam.pid) {
+          this.updateParam.pid = this.updateParam.pid[this.updateParam.pid.length-1];
+        } else {
+          this.updateParam.pid = 0;
         }
         if (!this.updateParam.seq) {
           this.updateParam.seq = 0
@@ -375,24 +395,6 @@
           this.$message.info("取消删除");
         })
       },
-      /**
-       * 递归加载目录树
-       */
-      tree(parentRes, data){
-        parentRes.forEach(parent => {
-          parent.children = [];
-          data.forEach(res => {
-            if(parent.id == res.pid){
-              parent.children.push(res);
-            }
-          });
-          if(parent.children) {
-            parent.children.sort((a, b) => a.seq - b.seq);
-            this.tree(parent.children, data);
-          }
-        });
-        return parentRes;
-      }
     }
   }
 </script>

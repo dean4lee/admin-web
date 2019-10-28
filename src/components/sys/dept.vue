@@ -39,7 +39,8 @@
             :options="deptData"
             :props="defaultProps"
             :show-all-levels="false"
-            clearable></el-cascader>
+            clearable
+            placeholder="不选择默认是顶级部门"></el-cascader>
         </el-form-item>
         <el-form-item label="名称" prop="name">
           <el-input size="small" v-model="addParam.name"/>
@@ -66,7 +67,8 @@
             :options="deptData"
             :props="defaultProps"
             :show-all-levels="false"
-            clearable></el-cascader>
+            clearable
+            placeholder="不选择默认是顶级部门"></el-cascader>
         </el-form-item>
         <el-form-item label="名称" prop="name">
           <el-input size="small" v-model="updateParam.name"/>
@@ -175,13 +177,10 @@
               parentData.push(dept);
             }
           });
-          if(!parentData){
+          if (!parentData) {
             parentData = data;
-          }else {
-            parentData.forEach(parentDept => {
-              this.tree(parentDept, data);
-            });
-            parentData.sort((a, b) => a.seq - b.seq);
+          } else {
+            this.GLOBAL.tree(parentData, data);
           }
           this.deptData = parentData;
           this.loading = false;
@@ -189,19 +188,6 @@
           this.$message.error(e.response.data.msg);
           this.loading = false;
         })
-      },
-      /**
-       *  递归加载树结构
-       */
-      tree(parentDept, data){
-        parentDept.children = [];
-        data.forEach(dept => {
-          if(dept.pid == parentDept.id){
-            parentDept.children.push(dept);
-            this.tree(dept, data);
-          }
-        });
-        parentDept.children.sort((a, b) => a.seq - b.seq);
       },
       /**
        * 搜索查询
@@ -267,7 +253,9 @@
           if (!valid) {
             return;
           }
-          this.addParam.pid = this.addParam.pid[this.addParam.pid.length-1];
+          if (this.addParam.pid) {
+            this.addParam.pid = this.addParam.pid[this.addParam.pid.length - 1];
+          }
           this.GLOBAL.formatObj(this.addParam);
           this.$axios.post(this.GLOBAL.baseurl + '/sys/dept/add', this.addParam, {
             withCredentials: true
@@ -289,8 +277,10 @@
           if (!valid) {
             return;
           }
-          this.updateParam.pid = this.updateParam.pid[this.updateParam.pid.length-1];
-          if (!this.updateParam.pid) {
+
+          if (this.updateParam.pid) {
+            this.updateParam.pid = this.updateParam.pid[this.updateParam.pid.length - 1];
+          } else {
             this.updateParam.pid = 0;
           }
           if (!this.updateParam.seq) {

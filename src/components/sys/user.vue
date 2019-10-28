@@ -17,9 +17,13 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-select v-model="searchParam.deptId" placeholder="部门" clearable>
-          <el-option v-for="dept in deptData" :label="dept.name" :value="dept.id" :key="dept.id"/>
-        </el-select>
+        <el-cascader
+          v-model="searchParam.deptId"
+          :options="deptData"
+          :props="cascaderProps"
+          :show-all-levels="false"
+          clearable
+          placeholder="部门"></el-cascader>
       </el-form-item>
       <el-form-item>
         <el-select v-model="searchParam.roleId" placeholder="角色" clearable>
@@ -204,6 +208,13 @@
           delete: false,
           status: false
         },
+        //多级联动配置
+        cascaderProps: {
+          checkStrictly: true,
+          children: 'children',
+          label: 'name',
+          value: 'id',
+        },
         //控制添加，编辑的弹出框显示和隐藏
         dialogForm: {
           add: false,
@@ -301,6 +312,9 @@
        * 加载数据
        */
       loadData() {
+        if(this.searchParam.deptId) {
+          this.searchParam.deptId = this.searchParam.deptId[this.searchParam.deptId.length-1];
+        }
         this.GLOBAL.formatObj(this.searchParam);
         this.loading = true;
         this.$axios.get(this.GLOBAL.baseurl + '/sys/user/list', {
@@ -346,7 +360,14 @@
         this.$axios.get(this.GLOBAL.baseurl + '/sys/dept/list', {
           withCredentials: true
         }).then(res => {
-          this.deptData = res.data.data;
+          let data = res.data.data;
+          let parentData = [];
+          data.forEach(dept => {
+            if (dept.pid == 0) {
+              parentData.push(dept);
+            }
+          });
+          this.deptData = this.GLOBAL.tree(parentData, data);
       }).catch(e => {
           this.$message.error(e.response.data.msg);
       })
