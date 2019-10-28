@@ -409,11 +409,7 @@
           this.updateParam.deptId = row.deptId;
           this.updateParam.roleIds = roleIds;
           this.updateParam.groupIds = groupIds;
-          if (row.sex == 1) {
-            this.updateParam.sex = '1';
-          } else if (row.sex == 0) {
-            this.updateParam.sex = '0';
-          }
+          this.updateParam.sex = row.sex + '';
         } else {
           //显示添加页面
           this.dialogForm.add = true;

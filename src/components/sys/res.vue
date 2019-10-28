@@ -31,25 +31,25 @@
       </el-col>
       <el-col :span="12">
         <!-- 显示资源的详细信息 -->
-        <el-form label-width="80px" disabled :model="infoParam" class="dialogStyle">
+        <el-form label-width="80px" :model="infoParam" class="dialogStyle">
           <el-form-item label="名称">
-            <el-input size="small" v-model="infoParam.name"/>
+            <el-input size="small" v-model="infoParam.name" readonly/>
           </el-form-item>
           <el-form-item label="类型">
-            <el-radio v-model="infoParam.type" label="1">菜单</el-radio>
-            <el-radio v-model="infoParam.type" label="2">权限</el-radio>
+            <el-radio v-model="infoParam.type" label="1" disabled>菜单</el-radio>
+            <el-radio v-model="infoParam.type" label="2" disabled>权限</el-radio>
           </el-form-item>
           <el-form-item label="url">
-            <el-input size="small" v-model="infoParam.url"/>
+            <el-input size="small" v-model="infoParam.url" readonly/>
           </el-form-item>
           <el-form-item label="权限字符">
-            <el-input size="small" v-model="infoParam.permChar"/>
+            <el-input size="small" v-model="infoParam.permChar" readonly/>
           </el-form-item>
           <el-form-item label="图标">
-            <el-input size="small" v-model="infoParam.icon"/>
+            <el-input size="small" v-model="infoParam.icon" readonly/>
           </el-form-item>
           <el-form-item label="排序">
-            <el-input size="small" v-model="infoParam.seq"/>
+            <el-input size="small" v-model="infoParam.seq" readonly/>
           </el-form-item>
         </el-form>
       </el-col>
@@ -265,11 +265,7 @@
        * @param data
        */
       showDetail(data) {
-        if (data.type == '1') {
-          data.type = '1';
-        } else if (data.type == '2') {
-          data.type = '2'
-        }
+        data.type = data.type + '';
         if (data.parentId == 0) {
           data.parentId = null;
         }

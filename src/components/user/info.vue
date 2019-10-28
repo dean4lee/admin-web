@@ -48,7 +48,7 @@
             {pattern: '^[0-9]{1,2}$', message: '年龄在0 到 99', trigger: 'blur'}
           ],
           email: [
-            // {required: true, message: '邮箱不能为空', trigger: 'blur'},
+            {required: true, message: '邮箱不能为空', trigger: 'blur'},
             {type: 'email', message: '邮箱格式不正确', trigger: 'blur'}
           ],
           phone: [
@@ -64,14 +64,7 @@
     methods: {
       init() {
         this.user = JSON.parse(localStorage.getItem('user'));
-        if(!this.user.age) {
-          this.user.age = null;
-        }
-        if (this.user.sex == '0') {
-          this.user.sex = '0';
-        } else if (this.user.sex == '1') {
-          this.user.sex = '1';
-        }
+        this.user.sex = this.user.sex + '';
       },
       update() {
         this.$refs['user'].validate((valid) => {

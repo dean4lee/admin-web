@@ -33,9 +33,9 @@
     <!-- 新增 -->
     <el-dialog title="添加" :visible.sync="dialogForm.add" width="30%" @close="closeEditFrom(true)" class="dialogStyle">
       <el-form label-width="80px" ref="addParam" :model="addParam" :rules="rules.add">
-        <el-form-item label="父级部门" prop="parentIds">
+        <el-form-item label="父级部门">
           <el-cascader
-            v-model="addParam.parentIds"
+            v-model="addParam.pid"
             :options="deptData"
             :props="defaultProps"
             :show-all-levels="false"
@@ -60,9 +60,9 @@
     <el-dialog title="修改" :visible.sync="dialogForm.update" width="30%" class="dialogStyle"
                @close="closeEditFrom(false)">
       <el-form label-width="80px" ref="updateParam" :model="updateParam" :rules="rules.update">
-        <el-form-item label="父级部门" prop="parentIds">
+        <el-form-item label="父级部门">
           <el-cascader
-            v-model="updateParam.parentIds"
+            v-model="updateParam.pid"
             :options="deptData"
             :props="defaultProps"
             :show-all-levels="false"
@@ -119,8 +119,7 @@
         addParam: {
           name: null,
           seq: null,
-          parentIds: null,
-          parentId: null,
+          pid: null,
           remark: null
         },
         //修改参数
@@ -128,8 +127,7 @@
           id: null,
           name: null,
           seq: null,
-          parentId: null,
-          parentIds: [],
+          pid: null,
           remark: null
         },
         //添加和修改用户的校验
@@ -139,9 +137,6 @@
               {required: true, message: '角色名不能为空', trigger: 'blur'},
               {min: 1, max: 12, message: '长度在 1 到 12 个字符', trigger: 'blur'}
             ],
-            parentIds: [
-              {required: true, message: '父级部门不能为空', trigger: 'blur'},
-            ],
             remark: [
               {min: 1, max: 500, message: '长度在 1 到 500 个字符', trigger: 'blur'}
             ]
@@ -150,9 +145,6 @@
             name: [
               {required: true, message: '角色名不能为空', trigger: 'blur'},
               {min: 1, max: 12, message: '长度在 1 到 12 个字符', trigger: 'blur'}
-            ],
-            parentIds: [
-              {required: true, message: '父级部门不能为空', trigger: 'blur'},
             ],
             remark: [
               {min: 1, max: 500, message: '长度在 1 到 500 个字符', trigger: 'blur'}
@@ -169,7 +161,7 @@
       /**
        * 加载表单数据
        */
-      loadData: function (compareFn) {
+      loadData: function () {
         this.GLOBAL.formatObj(this.searchParam);
         this.loading = true;
         this.$axios.get(this.GLOBAL.baseurl + '/sys/dept/list', {
@@ -247,7 +239,7 @@
           this.updateParam.id = row.id;
           this.updateParam.name = row.name;
           this.updateParam.seq = row.seq;
-          this.updateParam.parentIds = row.parentId;
+          this.updateParam.pid = row.pid;
           this.updateParam.remark = row.remark;
         } else {
           //显示添加页面
@@ -275,7 +267,7 @@
           if (!valid) {
             return;
           }
-          this.addParam.parentId = this.addParam.parentIds[this.addParam.parentIds.length-1];
+          this.addParam.pid = this.addParam.pid[this.addParam.pid.length-1];
           this.GLOBAL.formatObj(this.addParam);
           this.$axios.post(this.GLOBAL.baseurl + '/sys/dept/add', this.addParam, {
             withCredentials: true
@@ -297,10 +289,9 @@
           if (!valid) {
             return;
           }
-          let parentId = this.updateParam.parentIds[this.updateParam.parentIds.length-1];
-          this.updateParam.parentId = parentId ? parentId : this.updateParam.parentIds;
-          if (!this.updateParam.parentId) {
-            this.updateParam.parentId = 0;
+          this.updateParam.pid = this.updateParam.pid[this.updateParam.pid.length-1];
+          if (!this.updateParam.pid) {
+            this.updateParam.pid = 0;
           }
           if (!this.updateParam.seq) {
             this.updateParam.seq = 0
