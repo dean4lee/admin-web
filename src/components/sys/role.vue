@@ -282,7 +282,6 @@
           this.updateParam.roleChar = row.roleChar;
           this.updateParam.remark = row.remark;
           this.checkedResIds = this.recursionChildrenNode(this.resData, row.resIds);
-          console.log(this.checkedResIds)
         } else {
           //显示添加页面
           this.dialogForm.add = true;

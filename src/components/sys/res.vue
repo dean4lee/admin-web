@@ -335,7 +335,7 @@
           if (!valid) {
             return;
           }
-          if (this.addParam.pid) {
+          if (this.addParam.pid && this.addParam.pid.length > 0) {
             this.addParam.pid = this.addParam.pid[this.addParam.pid.length - 1];
           } else {
             this.addParam.pid = 0;
@@ -359,7 +359,7 @@
        * 修改资源
        */
       updateRes() {
-        if (this.updateParam.pid) {
+        if (this.updateParam.pid && this.updateParam.pid.length > 0) {
           this.updateParam.pid = this.updateParam.pid[this.updateParam.pid.length - 1];
         } else {
           this.updateParam.pid = 0;
@@ -367,6 +367,7 @@
         if (!this.updateParam.seq) {
           this.updateParam.seq = 0
         }
+        this.GLOBAL.formatObj(this.updateParam);
         this.$axios.put(this.GLOBAL.baseurl + '/sys/res/update', this.updateParam, {
           withCredentials: true
         }).then(res => {

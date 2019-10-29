@@ -9,7 +9,7 @@ function formatObj(obj) {
     return;
   }
   Object.keys(obj).forEach(key => {
-    if(!obj[key]){
+    if(obj[key] === ""){
       obj[key] = null;
     }
   })
